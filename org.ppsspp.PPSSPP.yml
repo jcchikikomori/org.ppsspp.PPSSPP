@@ -69,14 +69,7 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.20.4
-        commit: fa50bb1976065c4f8b1b47af227d367fe9771555
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/hrydgard/ppsspp/releases/latest
-          version-query: .tag_name | sub("^v"; "")
-          tag-query: .tag_name
-          timestamp-query: .published_at
+        branch: master
 
       - type: file
         path: org.ppsspp.PPSSPP.metainfo.xml
