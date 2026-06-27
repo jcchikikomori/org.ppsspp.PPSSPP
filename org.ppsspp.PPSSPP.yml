@@ -73,3 +73,6 @@ modules:
 
       - type: file
         path: org.ppsspp.PPSSPP.metainfo.xml
+
+      - type: patch
+        path: patches/0001-Add-missing-X11-include-for-EGL-builds.patch

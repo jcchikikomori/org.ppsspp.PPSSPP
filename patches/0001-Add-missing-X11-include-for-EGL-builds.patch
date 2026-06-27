@@ -1,0 +1,28 @@
+From: John Cyrill Corsanes <4709030+jcchikikomori@users.noreply.github.com>
+Date: Sat, 27 Jun 2026 11:31:00 +0800
+Subject: [PATCH] Add missing X11 include for EGL builds
+
+When USING_EGL is defined, SDLGLGraphicsContext.cpp calls XOpenDisplay()
+and XCloseDisplay() and uses the Display type, but the required
+<X11/Xlib.h> header is never explicitly included. On most platforms this
+works because X11 headers are pulled in transitively through other
+includes, but on some configurations (aarch64 Flatpak builds with GCC 15)
+this fails.
+
+Guard the include to avoid breaking Apple (where X11 may not be available
+as a header) and FBDEV (which doesn't use X11 at all).
+
+diff --git a/SDL/SDLGLGraphicsContext.cpp b/SDL/SDLGLGraphicsContext.cpp
+index 1f61167ca..4ab55d9aa 100644
+--- a/SDL/SDLGLGraphicsContext.cpp
++++ b/SDL/SDLGLGraphicsContext.cpp
+@@ -15,6 +15,9 @@
+ 
+ #if defined(USING_EGL)
+ #include "EGL/egl.h"
++#if !defined(USING_FBDEV) && !defined(__APPLE__)
++#include <X11/Xlib.h>
++#endif
+ #endif
+ 
+ class GLRenderManager;
